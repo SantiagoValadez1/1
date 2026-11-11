@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Felices 20 vueltas al sol Mojon!</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Paleta sobria y minimalista */
+        :root {
+            --fondo: #0c0d0e;
+            --tarjeta: #161719;
+            --borde: #26282b;
+            --borde-hover: #52525b;
+            --btn-principal-fondo: #f4f4f5;
+            --btn-principal-texto: #09090b;
+            --btn-principal-hover: #e4e4e7;
+            --btn-secundario-fondo: #202226;
+            --btn-secundario-borde: #32353b;
+            --btn-secundario-hover: #2c2f35;
+            --texto: #f4f4f5;
+            --texto-suave: #d1d4dc;
+            --texto-apagado: #8b8f97;
+            --resaltado-fondo: #222428;
+            --resaltado-borde: #3d4148;
+            --radio-xl: 18px;
+            --radio-lg: 14px;
+            --radio-md: 10px;
+            --sombra: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --fuente-titulo: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --fuente-cuerpo: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --transicion: all 0.25s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--fondo);
+            color: var(--texto);
+            font-family: var(--fuente-cuerpo);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 28px 16px;
+            overflow-x: hidden;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 660px;
+            margin: auto;
+        }
+
+        /* Tarjeta base compartida */
+        .bienvenida,
+        .reproductor,
+        .carta,
+        .frases {
+            background: var(--tarjeta);
+            border: 1px solid var(--borde);
+            box-shadow: var(--sombra);
+        }
+
+        /* Bienvenida */
+        .bienvenida {
+            border-radius: var(--radio-xl);
+            padding: 56px 32px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .bienvenida.oculta {
+            display: none;
+        }
+
+        .icono-flotante {
+            font-size: 4.5rem;
+            line-height: 1;
+            animation: flotar 3.5s ease-in-out infinite;
+        }
+
+        @keyframes flotar {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .titulo-bienvenida {
+            font-family: var(--fuente-titulo);
+            font-size: clamp(2rem, 5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+
+        .subtitulo-bienvenida {
+            color: var(--texto-apagado);
+            font-size: 1.05rem;
+            max-width: 460px;
+            line-height: 1.6;
+        }
+
+        /* Botones */
+        .btn-principal {
+            font-family: var(--fuente-titulo);
+            background: var(--btn-principal-fondo);
+            color: var(--btn-principal-texto);
+            border: none;
+            border-radius: 9999px;
+            padding: 15px 38px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            transition: var(--transicion);
+        }
+
+        .btn-principal:hover {
+            transform: scale(1.03);
+            background: var(--btn-principal-hover);
+        }
+
+        .btn-principal:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secundario {
+            font-family: var(--fuente-titulo);
+            background: var(--btn-secundario-fondo);
+            color: var(--texto);
+            border: 1px solid var(--btn-secundario-borde);
+            border-radius: 9999px;
+            padding: 12px 30px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicion);
+        }
+
+        .btn-secundario:hover {
+            background: var(--btn-secundario-hover);
+            border-color: var(--borde-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secundario:active {
+            transform: translateY(0);
+        }
+
+        .btn-confeti {
+            background: transparent;
+            border: 1px solid var(--borde);
+            color: var(--texto-apagado);
+            border-radius: 9999px;
+            padding: 9px 22px;
+            font-size: 0.86rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transicion);
+        }
+
+        .btn-confeti:hover {
+            border-color: var(--borde-hover);
+            color: var(--texto);
+            background: var(--tarjeta);
+        }
+
+        .fila-confeti {
+            display: flex;
+            justify-content: center;
+            padding-top: 4px;
+        }
+
+        /* Contenido revelado */
+        .sorpresa {
+            display: none;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .sorpresa.visible {
+            display: flex;
+            animation: aparecer 0.5s forwards;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .encabezado {
+            text-align: center;
+            padding: 8px 0 4px;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            background: var(--btn-secundario-fondo);
+            color: var(--texto-suave);
+            border: 1px solid var(--borde);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+
+        .titulo-revelado {
+            font-family: var(--fuente-titulo);
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .nombre-destacado {
+            text-decoration: underline;
+            text-decoration-color: var(--borde-hover);
+            text-underline-offset: 6px;
+        }
+
+        .subtitulo-revelado {
+            color: var(--texto-apagado);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Reproductor */
+        .reproductor {
+            border-radius: var(--radio-lg);
+            padding: 16px;
+        }
+
+        .reproductor-etiqueta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: var(--texto-apagado);
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+        }
+
+        .punto {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+        }
+
+        .punto.sonando {
+            animation: pulso 1.2s infinite alternate;
+        }
+
+        @keyframes pulso {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.35);
+                opacity: 1;
+            }
+        }
+
+        .btn-audio {
+            margin-left: auto;
+            background: var(--btn-secundario-fondo);
+            border: 1px solid var(--btn-secundario-borde);
+            color: var(--texto-suave);
+            border-radius: 9999px;
+            padding: 4px 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicion);
+        }
+
+        .btn-audio:hover {
+            background: var(--btn-secundario-hover);
+            color: #fff;
+        }
+
+        .reproductor iframe {
+            width: 100%;
+            height: 152px;
+            border: none;
+            border-radius: 12px;
+            display: block;
+            background: #121212;
+        }
+
+        /* Carta */
+        .carta {
+            border-left: 3px solid #71717a;
+            border-radius: var(--radio-lg);
+            padding: 32px 28px;
+        }
+
+        .carta-encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--borde);
+        }
+
+        .carta-saludo {
+            font-family: var(--fuente-titulo);
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .carta-sello {
+            font-size: 1.4rem;
+            opacity: 0.8;
+        }
+
+        .carta-cuerpo {
+            font-size: 1.04rem;
+            line-height: 1.85;
+            color: var(--texto-suave);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .campo {
+            background: var(--resaltado-fondo);
+            border-bottom: 1px solid var(--resaltado-borde);
+            color: var(--texto);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .carta-cierre {
+            margin-top: 10px;
+            padding-top: 16px;
+            border-top: 1px solid var(--borde);
+        }
+
+        .firma-titulo {
+            font-size: 0.85rem;
+            color: var(--texto-apagado);
+        }
+
+        .firma {
+            font-family: var(--fuente-titulo);
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-top: 6px;
+        }
+
+        /* Frases */
+        .frases {
+            border-radius: var(--radio-lg);
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 18px;
+        }
+
+        .frases h3 {
+            font-family: var(--fuente-titulo);
+            font-size: 1.22rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .frases-encabezado p {
+            font-size: 0.9rem;
+            color: var(--texto-apagado);
+        }
+
+        .frase-caja {
+            width: 100%;
+            min-height: 90px;
+            background: #111214;
+            border: 1px solid var(--borde);
+            border-radius: var(--radio-md);
+            padding: 22px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .frase-etiqueta {
+            position: absolute;
+            top: -10px;
+            background: #27272a;
+            color: var(--texto-suave);
+            border: 1px solid #3f3f46;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .frase-texto {
+            font-size: 1.05rem;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .frase-texto.animar {
+            animation: entrada 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes entrada {
+            0% {
+                opacity: 0;
+                transform: scale(0.97) translateY(4px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .pie {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--texto-apagado);
+            margin: 6px 0 16px;
+        }
+
+        /* Móviles */
+        @media (max-width: 600px) {
+            body {
+                padding: 16px 12px;
+            }
+
+            .bienvenida {
+                padding: 40px 20px;
+                gap: 20px;
+            }
+
+            .titulo-bienvenida {
+                font-size: 1.95rem;
+            }
+
+            .icono-flotante {
+                font-size: 3.8rem;
+            }
+
+            .btn-principal {
+                padding: 14px 28px;
+                font-size: 1.02rem;
+                width: 100%;
+            }
+
+            .carta {
+                padding: 24px 18px;
+            }
+
+            .carta-cuerpo {
+                font-size: 0.98rem;
+                line-height: 1.75;
+            }
+
+            .frases {
+                padding: 22px 16px;
+            }
+
+            .btn-secundario {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <audio id="audioCumple" preload="auto" loop playsinline>
+        <source src="cancion.mp3" type="audio/mpeg">
+    </audio>
+
+    <main class="contenedor">
+
+        <!-- 1. Bienvenida -->
+        <section id="pantallaBienvenida" class="bienvenida">
+            <div class="icono-flotante" aria-hidden="true">🎂</div>
+
+            <header>
+                <h1 class="titulo-bienvenida">🎉 Feliz Cumpleaños 🎉</h1>
+                <p class="subtitulo-bienvenida">
+                    Celebremos tu dia y todo lo que te hace una persona tan especial pa todos. Picale ps wey que te
+                    quedas viendo?.
+                </p>
+            </header>
+
+            <button class="btn-principal" onclick="abrirSorpresa()">Que le piques w</button>
+        </section>
+
+        <!-- 2. Contenido revelado -->
+        <section id="contenidoSorpresa" class="sorpresa" aria-hidden="true">
+
+            <header class="encabezado">
+                <div class="etiqueta">Ya vas pal asilo w no manches</div>
+                <h2 class="titulo-revelado">¡Felicidades, <span class="nombre-destacado">Joss</span>!</h2>
+                <p class="subtitulo-revelado">
+                    Que este nuevo año de vida esté lleno de luz, éxitos y felicidad. Y si ya la cosa va de la
+                    fregada minimo de dinero
+                </p>
+            </header>
+
+            <article class="reproductor">
+                <div class="reproductor-etiqueta">
+                    <span class="punto" id="puntoMusica"></span>
+                    <span>Spotirai</span>
+                    <button id="btnAudio" class="btn-audio" onclick="alternarAudio()"
+                        title="Pausar o reanudar música">🔊 Sonando</button>
+                </div>
+                <iframe src="https://open.spotify.com/embed/track/5M0xCMnbD2gDUfhRo5pvlT?utm_source=generator&theme=0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"
+                    title="Reproductor de música Spotify - Jenni Rivera"></iframe>
+            </article>
+
+            <article class="carta">
+                <div class="carta-encabezado">
+                    <span class="carta-saludo">Querida <span class="campo">Joss</span>,</span>
+                    <span class="carta-sello" aria-hidden="true">💌</span>
+                </div>
+
+                <div class="carta-cuerpo">
+                    <p>
+                        ¡Hoy es un día sumamente especial, mas para nosotros que para ti, pues celebramos los
+                        <span class="campo">20</span> años! de una persona muy importarte. Y yo (la chulada de
+                        amigo que tienes) quería detenerme un momento para recordarte lo mucho que vales y lo
+                        afortunados que somos todos los que tenemos la dicha de tenerte cerca...
+                        <span class="campo">(pero mas yo pq a mi nadie me gana)</span>.
+                    </p>
+                    <p>
+                        Siempre he admirado profundamente tu lealtad, tu vibra y las ganas que le metes a todo lo que
+                        haces, además de esa forma tan tuya de contarme chisme (Eso es algo tan tu).
+                        Gracias por cada plática, por cada risa y por estar siempre en los buenos y mas en los malos
+                        momentos.
+                    </p>
+                    <p>
+                        Para este nuevo año, te deseo de corazón que todos tus proyectos y metas se cumplan al 100,
+                        y que nunca te falte salud, éxito y algun vatillo pa q cotorries (Esq tambien no ayudas mija,
+                        te consigues cada personaje).
+                    </p>
+                    <p>Que tengas un día inolvidable rodeada de las personas que te quieren</p>
+                </div>
+
+                <footer class="carta-cierre">
+                    <div class="firma-titulo">Con todo mi cariño,</div>
+                    <div class="firma">
+                        <span class="campo">El genio, billonario, playboy, filántropo, ministro de
+                            defensa, presidente de la República Democrática del Congo, comandante supremo de las
+                            fuerzas armadas, director general del espacio sideral, desarrollador Senior Full-Stack,
+                            soporte técnico 24/7, embajador plenipotenciario de la paz, astronauta retirado, premio
+                            Nobel de la humildad, piloto honorario de la Fuerza Aérea, consejero de la ONU y tu
+                            compota el mas chicle bomba</span>
+                        ❤️
+                    </div>
+                </footer>
+            </article>
+
+            <article class="frases">
+                <div class="frases-encabezado">
+                    <h3>Caja de Consejos y frases mamalonas que dijeron la Jenni, Paquita, D'alessio... Pura vieja
+                        chingona ps</h3>
+                    <p>Haz clic para </p>
+                </div>
+
+                <button class="btn-secundario" onclick="mostrarFraseAleatoria()">Iluminarse</button>
+
+                <div class="frase-caja">
+                    <span class="frase-etiqueta" id="contadorFrase">Frases Chingonas</span>
+                    <p id="textoFrase" class="frase-texto">"Presiona el botón para descubrirlas..."</p>
+                </div>
+            </article>
+
+            <div class="fila-confeti">
+                <button class="btn-confeti" onclick="lanzarConfeti()">🎉 ¡Lanzar más confeti!</button>
+            </div>
+
+            <footer class="pie">Hecho con cariño y con las patas</footer>
+
+        </section>
+
+    </main>
+
+    <script>
+        const audioCumple = document.getElementById('audioCumple');
+        const btnAudio = document.getElementById('btnAudio');
+        const puntoMusica = document.getElementById('puntoMusica');
+        const textoFrase = document.getElementById('textoFrase');
+        const contadorFrase = document.getElementById('contadorFrase');
+
+        const frases = [
+            "No se trata de ser buena o mala, se trata de no ser la pendeja de nadie.",
+            "Enamorarse a lo pendejo no es malo... enamorarse de pendejos si.",
+            "Que sepan pelear las feas, las bonitas corremos.",
+            "Vieja pioja.",
+            "Si el hombre fuera bueno, Dios tendria uno.",
+            "La que es perra, dondequiera es perra, y tú nomás ladras.",
+            "Te quedó grande la yegua, por eso buscaste una potranca.",
+            "Ámate, quiérete, valórate, nunca llores por lo que no vale la pena.",
+            "Perra, pero no corriente; cabrona, pero no pendeja.",
+            "Si por pendeja me caigo, por chingona me levanto."
+        ];
+
+        const coloresConfeti = ['#f4f4f5', '#fbbf24', '#f59e0b', '#38bdf8', '#a1a1aa'];
+        let indiceUltimaFrase = -1;
+
+        /* Audio */
+        function actualizarAudio(sonando, etiqueta) {
+            puntoMusica.classList.toggle('sonando', sonando);
+            btnAudio.textContent = etiqueta;
+        }
+
+        function iniciarAudio() {
+            audioCumple.play()
+                .then(() => actualizarAudio(true, '🔊 Sonando'))
+                .catch(() => actualizarAudio(false, '🔇 Pausado'));
+        }
+
+        function alternarAudio() {
+            if (audioCumple.paused) {
+                iniciarAudio();
+            } else {
+                audioCumple.pause();
+                actualizarAudio(false, '🔇 Pausado');
+            }
+        }
+
+        // Si se hace clic en el reproductor de Spotify, se pausa el audio de fondo
+        window.addEventListener('blur', () => {
+            setTimeout(() => {
+                if (document.activeElement?.tagName === 'IFRAME' && !audioCumple.paused) {
+                    audioCumple.pause();
+                    actualizarAudio(false, '🔇 Spotify');
+                }
+            }, 150);
+        });
+
+        /* Confeti */
+        function lanzarConfeti() {
+            if (typeof confetti !== 'function') return;
+            confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 }, colors: coloresConfeti, disableForReducedMotion: true });
+            confetti({ particleCount: 45, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors: coloresConfeti });
+            confetti({ particleCount: 45, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: coloresConfeti });
+        }
+
+        /* Revelado */
+        function abrirSorpresa() {
+            document.getElementById('pantallaBienvenida').classList.add('oculta');
+
+            const contenido = document.getElementById('contenidoSorpresa');
+            contenido.classList.add('visible');
+            contenido.setAttribute('aria-hidden', 'false');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            lanzarConfeti();
+            iniciarAudio();
+        }
+
+        /* Frases */
+        function mostrarFraseAleatoria() {
+            let indice;
+            do {
+                indice = Math.floor(Math.random() * frases.length);
+            } while (indice === indiceUltimaFrase);
+            indiceUltimaFrase = indice;
+
+            textoFrase.classList.remove('animar');
+            void textoFrase.offsetWidth; // reinicia la animación
+            textoFrase.textContent = `"${frases[indice]}"`;
+            contadorFrase.textContent = `Frase #${indice + 1} de ${frases.length}`;
+            textoFrase.classList.add('animar');
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 16, spread: 45, startVelocity: 18, origin: { y: 0.8 }, colors: ['#ffffff', '#fbbf24', '#d1d4dc'] });
+            }
+        }
+    </script>
+</body>
+
+</html>
